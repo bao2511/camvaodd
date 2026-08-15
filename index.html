@@ -16,429 +16,98 @@
             --ios-font: 'Plus Jakarta Sans', -apple-system, sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: var(--ios-font); display: flex; justify-content: center; align-items: center; background: #d8f3dc; }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: var(--ios-font);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #d8f3dc;
-        }
-
-        .animated-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-45deg, #e8f5e9, #d8f3dc, #b7e4c7, #f1faee);
-            background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
-            z-index: 1;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.75;
-            z-index: 2;
-            animation: floatBlob 10s ease-in-out infinite alternate;
-        }
-
+        /* Nền, Blob, Canvas giữ nguyên */
+        .animated-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(-45deg, #e8f5e9, #d8f3dc, #b7e4c7, #f1faee); background-size: 400% 400%; animation: gradientMove 12s ease infinite; z-index: 1; }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.75; z-index: 2; animation: floatBlob 10s ease-in-out infinite alternate; }
         .blob-1 { width: 340px; height: 340px; background: #74c69d; top: 10%; left: 10%; }
         .blob-2 { width: 360px; height: 360px; background: #b7e4c7; bottom: 10%; right: 10%; animation-delay: -5s; }
+        @keyframes floatBlob { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 40px) scale(1.2); } }
+        #particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
 
-        @keyframes floatBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 40px) scale(1.2); }
+        /* Card */
+        .glass-card { position: relative; z-index: 10; width: 90%; max-width: 420px; padding: 36px 28px; background: var(--glass-card); backdrop-filter: blur(35px); border-radius: 36px; border: 1.5px solid var(--glass-border); text-align: center; }
+        .gift-box-icon { font-size: 80px; margin-bottom: 20px; cursor: pointer; animation: giftBounce 1.2s ease-in-out infinite alternate; }
+        @keyframes giftBounce { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-15px) scale(1.1); } }
+        .btn-continue { width: 100%; padding: 16px; font-size: 16px; font-weight: 700; border-radius: 20px; border: none; cursor: pointer; background: linear-gradient(135deg, #52b788 0%, #2d6a4f 100%); color: #ffffff; }
+
+        /* --- MÀN HÌNH TROLL MỚI --- */
+        #trollScreen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 999; overflow: hidden; }
+        
+        /* Hiệu ứng rung lắc khi bắt đầu */
+        .shake { animation: shakeEffect 0.5s ease-in-out; }
+        @keyframes shakeEffect {
+            0% { transform: translate(10px, 10px); }
+            20% { transform: translate(-10px, -10px); }
+            40% { transform: translate(10px, -10px); }
+            60% { transform: translate(-10px, 10px); }
+            100% { transform: translate(0, 0); }
         }
 
-        #particleCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            pointer-events: none;
-        }
+        .dog-bubble { position: absolute; bottom: -60px; opacity: 0.7; animation: floatUp linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 20% { opacity: 0.85; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
 
-        .glass-card {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 420px;
-            padding: 36px 28px;
-            background: var(--glass-card);
-            backdrop-filter: blur(35px) saturate(180%);
-            -webkit-backdrop-filter: blur(35px) saturate(180%);
-            border-radius: 36px;
-            border: 1.5px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), inset 0 2px 6px rgba(255, 255, 255, 0.95);
-            text-align: center;
-            animation: iosPopIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes iosPopIn {
-            0% { opacity: 0; transform: scale(0.85) translateY(30px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .icon-wrapper {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 20px auto;
-            background: linear-gradient(135deg, #74c69d, #52b788);
-            border-radius: 22px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 36px;
-            box-shadow: 0 12px 24px rgba(82, 183, 136, 0.35);
-        }
-
-        .gift-box-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            animation: giftBounce 1.2s ease-in-out infinite alternate;
-        }
-
-        @keyframes giftBounce {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-15px) scale(1.1); }
-        }
-
-        .instruction-box {
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 18px 16px;
-            margin-bottom: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.85);
-        }
-
-        .instruction-title {
-            color: var(--green-dark);
-            font-size: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 6px;
-        }
-
-        .instruction-text {
-            color: #1b4332;
-            font-size: 17px;
-            font-weight: 600;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-        }
-
-        .ios-btn {
-            flex: 1;
-            padding: 16px 20px;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: var(--ios-font);
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .btn-continue {
-            background: linear-gradient(135deg, #52b788 0%, #2d6a4f 100%);
-            color: #ffffff;
-            box-shadow: 0 10px 20px rgba(45, 106, 79, 0.25);
-        }
-
-        .btn-exit {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(10px);
-            color: var(--green-dark);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-        }
-
-        .ios-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* --- MÀN HÌNH TROLL (KHÔNG CHỚP NHÁY) --- */
-        #trollScreen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #1a2a3a; /* Nền tối dịu mắt */
-            z-index: 999;
-            overflow: hidden;
-        }
-
-        /* Khung chứa bong bóng con chó 🐶 bay lơ lửng */
-        #dogBubbleContainer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .dog-bubble {
-            position: absolute;
-            bottom: -60px;
-            opacity: 0.7;
-            animation: floatUp linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            20% {
-                opacity: 0.85;
-            }
-            100% {
-                transform: translateY(-110vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Khung trung tâm: Từ DOG + Icon 🐶 phóng to thu nhỏ nhịp nhàng */
+        /* Text DOG nháy mạnh và Zoom */
         .troll-center-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            text-align: center;
-            animation: zoomPulse 1.8s ease-in-out infinite alternate;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1001; text-align: center;
+            animation: zoomPulse 1.5s ease-in-out infinite alternate, flicker 0.2s linear infinite;
         }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        @keyframes zoomPulse { 0% { transform: translate(-50%, -50%) scale(0.9); } 100% { transform: translate(-50%, -50%) scale(1.1); } }
 
-        @keyframes zoomPulse {
-            0% {
-                transform: translate(-50%, -50%) scale(0.85);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1.25);
-            }
-        }
-
-        /* Chữ DOG sắc nét có viền */
-        .big-dog-title {
-            font-size: 85px;
-            font-weight: 800;
-            letter-spacing: 4px;
-            color: #ffeb3b;
-            text-shadow: 
-                3px 3px 0 #000,
-               -3px -3px 0 #000,
-                3px -3px 0 #000,
-               -3px 3px 0 #000,
-                0px 5px 20px rgba(0, 0, 0, 0.7);
-            line-height: 1;
-            margin-bottom: 12px;
-        }
-
-        /* Icon con chó lớn ở giữa */
-        .big-dog-icon {
-            font-size: 110px;
-            line-height: 1;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-        }
+        .big-dog-title { font-size: 85px; font-weight: 800; color: #ffeb3b; text-shadow: 0px 0px 20px rgba(255, 235, 59, 0.8); }
+        .big-dog-icon { font-size: 110px; }
     </style>
 </head>
 <body>
 
     <div class="animated-bg"></div>
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <canvas id="particleCanvas"></canvas>
-
-    <!-- Màn 1: Xác nhận -->
     <div id="step1" class="glass-card">
-        <div class="icon-wrapper">✨</div>
-        <div class="instruction-box">
-            <div class="instruction-title">Xác Nhận</div>
-            <div class="instruction-text">Bạn có muốn tiếp tục khám phá điều bất ngờ không?</div>
-        </div>
-        <div class="button-group">
-            <button class="ios-btn btn-exit" onclick="goToGiftStep()">Thoát</button>
-            <button class="ios-btn btn-continue" onclick="goToGiftStep()">Tiếp tục</button>
-        </div>
+        <div style="font-size: 40px; margin-bottom: 15px;">✨</div>
+        <div style="font-size: 18px; margin-bottom: 20px; font-weight: 600;">Bạn có muốn tiếp tục không?</div>
+        <button class="btn-continue" onclick="document.getElementById('step1').style.display='none'; document.getElementById('step2').style.display='block';">Tiếp tục</button>
     </div>
 
-    <!-- Màn 2: Trang Hộp Quà -->
     <div id="step2" class="glass-card" style="display: none;">
         <div class="gift-box-icon" onclick="startTroll()">🎁</div>
-        <div class="instruction-box">
-            <div class="instruction-title">Phần Quà Bí Mật</div>
-            <div class="instruction-text">Chạm vào hộp quà để mở điều bất ngờ!</div>
-        </div>
-        <button class="ios-btn btn-continue" style="width: 100%;" onclick="startTroll()">Mở Hộp Quà</button>
+        <div style="font-size: 18px; margin-bottom: 20px;">Mở quà đi!</div>
     </div>
 
-    <!-- Màn 3: Troll -->
     <div id="trollScreen">
-        <!-- Bong bóng chó bay lơ lửng -->
         <div id="dogBubbleContainer"></div>
-
-        <!-- Chữ DOG và Icon chính giữa phóng to thu nhỏ -->
         <div class="troll-center-content">
             <div class="big-dog-title">DOG</div>
             <div class="big-dog-icon">🐶</div>
         </div>
-
-        <!-- Audio CDN HTTPS -->
-        <audio id="audioTrack" src="https://stream.zeno.fm/f3wvbbqmdg8uv" preload="auto" loop playsinline></audio>
+        <!-- Link Never Gonna Give You Up chuẩn -->
+        <audio id="audioTrack" src="https://archive.org/download/Rick_Astley_Never_Gonna_Give_You_Up/Rick_Astley_Never_Gonna_Give_You_Up.mp3" loop playsinline></audio>
     </div>
 
     <script>
-        let audioPrepared = false;
-
-        function prepareAudio() {
-            if(!audioPrepared) {
-                const audio = document.getElementById('audioTrack');
-                audio.play().then(() => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    audioPrepared = true;
-                }).catch(() => {});
-            }
-        }
-
-        function goToGiftStep() {
-            prepareAudio();
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        }
-
         function startTroll() {
-            prepareAudio();
-            const trollScreen = document.getElementById('trollScreen');
-            const audio = document.getElementById('audioTrack');
-
-            trollScreen.style.display = 'block';
-            audio.volume = 1.0;
+            document.getElementById('step2').style.display = 'none';
+            const screen = document.getElementById('trollScreen');
+            screen.style.display = 'block';
+            screen.classList.add('shake'); // Kích hoạt rung lắc
             
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    const forcePlay = () => {
-                        audio.play();
-                        document.removeEventListener('click', forcePlay);
-                        document.removeEventListener('touchstart', forcePlay);
-                    };
-                    document.addEventListener('click', forcePlay);
-                    document.addEventListener('touchstart', forcePlay);
-                });
-            }
-
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen();
-            }
-
-            // Bắt đầu tạo bong bóng icon con chó 🐶
-            createDogBubbles();
-        }
-
-        // Tạo hiệu ứng bong bóng 🐶 lơ lửng xung quanh
-        function createDogBubbles() {
-            const container = document.getElementById('dogBubbleContainer');
+            document.getElementById('audioTrack').play().catch(()=>{});
             
+            // Bong bóng chó
             setInterval(() => {
-                const bubble = document.createElement('div');
-                bubble.classList.add('dog-bubble');
-                bubble.innerText = '🐶';
-                
-                // Vị trí xuất hiện ngẫu nhiên theo chiều ngang (0 - 90vw)
-                bubble.style.left = Math.random() * 90 + 'vw';
-                
-                // Kích thước bong bóng ngẫu nhiên (28px - 55px)
-                const size = Math.random() * 27 + 28;
-                bubble.style.fontSize = size + 'px';
-                
-                // Tốc độ bay ngẫu nhiên (4 đến 8 giây)
-                const duration = Math.random() * 4 + 4;
-                bubble.style.animationDuration = duration + 's';
-                
-                container.appendChild(bubble);
-
-                // Tự xóa phần tử sau khi bay khỏi màn hình
-                setTimeout(() => {
-                    bubble.remove();
-                }, duration * 1000);
-            }, 350);
+                const b = document.createElement('div');
+                b.className = 'dog-bubble';
+                b.innerText = '🐶';
+                b.style.left = Math.random() * 90 + 'vw';
+                b.style.fontSize = (Math.random() * 20 + 30) + 'px';
+                b.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                document.getElementById('dogBubbleContainer').appendChild(b);
+                setTimeout(() => b.remove(), 6000);
+            }, 300);
         }
-
-        /* Canvas background */
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        const particles = [];
-        for (let i = 0; i < 25; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 6 + 2,
-                alpha: Math.random() * 0.5 + 0.2,
-                speedY: Math.random() * 0.8 + 0.3,
-                speedX: Math.sin(Math.random() * Math.PI) * 0.4
-            });
-        }
-
-        function drawParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
-                ctx.fill();
-                p.y -= p.speedY;
-                p.x += p.speedX;
-                if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
-            });
-            requestAnimationFrame(drawParticles);
-        }
-        drawParticles();
     </script>
 </body>
 </html>
+                           
