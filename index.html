@@ -183,7 +183,7 @@
             border: 1px solid rgba(255, 255, 255, 0.9);
         }
 
-        /* Màn hình Troll */
+        /* --- MÀN HÌNH TROLL BẮT ĐẦU TỪ ĐÂY --- */
         #trollScreen {
             display: none;
             position: fixed;
@@ -191,67 +191,91 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: #000;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             z-index: 999;
             overflow: hidden;
         }
 
-        /* Màn hình chớp nháy màu liên tục */
-        .color-flash {
-            width: 100%;
-            height: 100%;
+        /* Container chứa các icon chó lơ lửng */
+        #dogBubbleContainer {
             position: absolute;
             top: 0;
             left: 0;
-            animation: rainbowFlash 0.1s linear infinite;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
         }
 
-        @keyframes rainbowFlash {
-            0% { background: #ff0000; }
-            20% { background: #00ff00; }
-            40% { background: #0000ff; }
-            60% { background: #ffff00; }
-            80% { background: #ff00ff; }
-            100% { background: #00ffff; }
+        .dog-bubble {
+            position: absolute;
+            bottom: -60px;
+            opacity: 0.7;
+            animation: floatUp linear infinite;
         }
 
-        /* Ảnh chó zoom và xoay liên tục */
-        .troll-img {
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) scale(1.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Khung nội dung trung tâm: Từ DOG + Icon phóng to thu nhỏ */
+        .troll-center-content {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 85vw;
-            max-width: 400px;
-            z-index: 1000;
-            animation: crazySpin 0.3s infinite linear alternate;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            text-align: center;
+            animation: zoomPulse 1.2s ease-in-out infinite alternate;
         }
 
-        @keyframes crazySpin {
-            0% { transform: translate(-50%, -50%) scale(0.8) rotate(-15deg); }
-            100% { transform: translate(-50%, -50%) scale(1.3) rotate(15deg); }
+        @keyframes zoomPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.85);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.15);
+            }
         }
 
-        /* Chữ DOG nhảy loạn xạ */
-        #dogText {
-            display: none;
-            position: absolute;
-            font-size: 65px;
-            font-weight: 900;
-            font-family: impact, sans-serif;
-            color: yellow;
-            text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
-            z-index: 10005;
-            pointer-events: none;
-            white-space: nowrap;
-            animation: fastBlink 0.1s infinite alternate;
+        /* Từ DOG có viền sắc nét */
+        .big-dog-title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #ffeb3b;
+            /* Tạo hiệu ứng viền chữ đậm nét */
+            text-shadow: 
+                3px 3px 0 #000,
+               -3px -3px 0 #000,
+                3px -3px 0 #000,
+               -3px 3px 0 #000,
+                0px 4px 15px rgba(0, 0, 0, 0.6);
+            line-height: 1;
+            margin-bottom: 15px;
         }
 
-        @keyframes fastBlink {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        /* Icon con chó lớn ở giữa */
+        .big-dog-icon {
+            font-size: 110px;
+            line-height: 1;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
         }
-
     </style>
 </head>
 <body>
@@ -284,27 +308,17 @@
         <button class="ios-btn btn-continue" style="width: 100%;" onclick="startTroll()">Mở Hộp Quà</button>
     </div>
 
-    <!-- Màn 3: Màn Hình Trừng Phạt -->
+    <!-- Màn 3: Trang Bất Ngờ (Troll) -->
     <div id="trollScreen" onclick="forcePlayAudio()">
-        <div class="color-flash"></div>
-        
-        <!-- Ảnh chó được vẽ bằng mã (Không bao giờ lỗi) -->
-        <svg class="troll-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-           <circle cx="50" cy="50" r="45" fill="#f4a261"/>
-           <circle cx="35" cy="40" r="12" fill="#fff"/>
-           <circle cx="35" cy="40" r="4" fill="#000"/>
-           <circle cx="65" cy="40" r="12" fill="#fff"/>
-           <circle cx="65" cy="40" r="4" fill="#000"/>
-           <ellipse cx="50" cy="65" rx="18" ry="12" fill="#e76f51"/>
-           <path d="M40,70 Q50,85 60,70" stroke="#000" stroke-width="4" fill="transparent"/>
-           <path d="M45,72 Q50,95 55,72" fill="#e63946"/> <!-- Lưỡi thè ra -->
-           <ellipse cx="15" cy="30" rx="12" ry="30" fill="#264653" transform="rotate(-30 15 30)"/>
-           <ellipse cx="85" cy="30" rx="12" ry="30" fill="#264653" transform="rotate(30 85 30)"/>
-        </svg>
+        <!-- Container sinh bong bóng icon chó -->
+        <div id="dogBubbleContainer"></div>
 
-        <!-- Chữ DOG nhảy loạn -->
-        <div id="dogText">DOG</div>
-        
+        <!-- Khung trung tâm phóng to thu nhỏ -->
+        <div class="troll-center-content">
+            <div class="big-dog-title">DOG</div>
+            <div class="big-dog-icon">🐶</div>
+        </div>
+
         <!-- Nhạc nền: Never Gonna Give You Up (Link chuẩn Archive.org) -->
         <audio id="audioTrack" src="https://archive.org/download/Rick_Astley_Never_Gonna_Give_You_Up/Rick_Astley_Never_Gonna_Give_You_Up.mp3" preload="auto" loop playsinline></audio>
     </div>
@@ -312,7 +326,7 @@
     <script>
         let audioTrack = document.getElementById('audioTrack');
 
-        // Hàm mồi âm thanh (Hack qua mặt Safari/TikTok)
+        // Hàm mồi âm thanh (Tối ưu riêng cho Safari / TikTok)
         function prepareAudio() {
             audioTrack.play().then(() => {
                 audioTrack.pause();
@@ -338,7 +352,7 @@
             const trollScreen = document.getElementById('trollScreen');
             trollScreen.style.display = 'block';
 
-            // Kích hoạt nhạc lớn hết cỡ
+            // Kích hoạt âm thanh
             audioTrack.volume = 1.0;
             const playPromise = audioTrack.play();
             
@@ -361,22 +375,40 @@
                 document.documentElement.webkitRequestFullscreen();
             }
 
-            // CODE CHO CHỮ "DOG" NHẢY LOẠN XẠ
-            const dogText = document.getElementById('dogText');
-            dogText.style.display = 'block';
+            // Tạo bong bóng icon chó lơ lửng
+            createDogBubbles();
+        }
+
+        // Hàm sinh các icon con chó bay lơ lửng ở phông nền
+        function createDogBubbles() {
+            const container = document.getElementById('dogBubbleContainer');
+            const dogIcons = ['🐶', '🐕', '🐩', '🦮', '🐕‍🦺'];
             
             setInterval(() => {
-                // Nhảy vị trí ngẫu nhiên
-                dogText.style.top = (Math.random() * 80) + 'vh';
-                dogText.style.left = (Math.random() * 70) + 'vw';
+                const bubble = document.createElement('div');
+                bubble.classList.add('dog-bubble');
                 
-                // Đổi màu ngẫu nhiên cho hoa mắt
-                const colors = ['#ffff00', '#ff0000', '#00ff00', '#00ffff', '#ff00ff', '#ffffff'];
-                dogText.style.color = colors[Math.floor(Math.random() * colors.length)];
+                // Chọn ngẫu nhiên icon chó
+                bubble.innerText = dogIcons[Math.floor(Math.random() * dogIcons.length)];
                 
-                // Kéo giãn và nghiêng ngẫu nhiên
-                dogText.style.transform = `rotate(${Math.random() * 360}deg) scale(${Math.random() * 1.5 + 0.5})`;
-            }, 250); // Cứ 0.25 giây nhảy 1 lần
+                // Vị trí ngang ngẫu nhiên (0 - 90%)
+                bubble.style.left = Math.random() * 90 + 'vw';
+                
+                // Kích thước ngẫu nhiên (24px - 50px)
+                const size = Math.random() * 26 + 24;
+                bubble.style.fontSize = size + 'px';
+                
+                // Thời gian bay ngẫu nhiên (4s - 8s)
+                const duration = Math.random() * 4 + 4;
+                bubble.style.animationDuration = duration + 's';
+                
+                container.appendChild(bubble);
+
+                // Tự xóa phần tử sau khi bay xong để tránh nặng máy
+                setTimeout(() => {
+                    bubble.remove();
+                }, duration * 1000);
+            }, 300); // Mỗi 0.3 giây sinh ra 1 bong bóng mới
         }
 
         /* CODE NỀN HẠT CANVAS MÀN HÌNH CHÍNH */
