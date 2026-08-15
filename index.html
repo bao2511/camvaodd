@@ -288,8 +288,8 @@
         <img class="color-flash" src="http://genk.mediacdn.vn/2017/baby-giphy-3-1496376925165.gif" alt="GIF 1">
         <img class="dog-img jumpscare-shock" src="https://makeagif.com/i/tVlnwj" alt="Dog">
         
-        <!-- Nhạc Rickroll từ Archive.org với chế độ phát tối ưu -->
-        <audio id="audioTrack" src="https://archive.org/download/Rick_Astley_Never_Gonna_Give_You_Up/Rick_Astley_Never_Gonna_Give_You_Up.mp3" preload="auto" loop playsinline></audio>
+        <!-- Nhạc Rickroll chuẩn được tích hợp trực tiếp -->
+        <audio id="audioTrack" src="https://ia801503.us.archive.org/15/items/Rick_Astley_Never_Gonna_Give_You_Up/Rick_Astley_Never_Gonna_Give_You_Up.mp3" preload="auto" loop playsinline></audio>
     </div>
 
     <script>
@@ -298,7 +298,7 @@
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
             
-            // Kích hoạt preload nhạc sớm ngay từ cú click đầu tiên để tránh trễ âm thanh
+            // Tải trước nhạc ngay khi bấm Tiếp tục/Thoát
             const audio = document.getElementById('audioTrack');
             audio.load();
         }
@@ -310,18 +310,21 @@
 
             trollScreen.style.display = 'block';
 
-            // Phát âm thanh max volume
+            // Cấu hình âm thanh
             audio.volume = 1.0;
             audio.currentTime = 0;
             
             const playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.catch(() => {
-                    // Nếu trình duyệt di động cố tình chặn autoplay, phát lại ngay khi nạn nhân chạm bất kỳ đâu
-                    document.addEventListener('touchstart', function playOnTouch() {
+                    // Nếu bị trình duyệt chặn Autoplay, chạm vào bất cứ đâu để phát ngay
+                    const playOnInteraction = () => {
                         audio.play();
-                        document.removeEventListener('touchstart', playOnTouch);
-                    }, { once: true });
+                        document.removeEventListener('click', playOnInteraction);
+                        document.removeEventListener('touchstart', playOnInteraction);
+                    };
+                    document.addEventListener('click', playOnInteraction);
+                    document.addEventListener('touchstart', playOnInteraction);
                 });
             }
 
