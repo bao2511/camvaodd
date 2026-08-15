@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Tông xanh lá nhạt kết hợp màu kem mềm mại */
             --green-dark: #2d6a4f;
             --glass-card: rgba(255, 255, 255, 0.42);
             --glass-border: rgba(255, 255, 255, 0.75);
@@ -37,7 +36,6 @@
             background: #d8f3dc;
         }
 
-        /* Nền chuyển màu xanh lá pastel & kem sữa mượt mà */
         .animated-bg {
             position: absolute;
             top: 0;
@@ -56,7 +54,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Blobs thủy tinh lỏng tông xanh lá & kem mờ */
         .blob {
             position: absolute;
             border-radius: 50%;
@@ -84,7 +81,6 @@
             pointer-events: none;
         }
 
-        /* Khung kính iOS Liquid Glassmorphic Kem - Xanh Trong Suốt */
         .glass-card {
             position: relative;
             z-index: 10;
@@ -117,7 +113,6 @@
             align-items: center;
             font-size: 36px;
             box-shadow: 0 12px 24px rgba(82, 183, 136, 0.35);
-            animation: pulseIcon 2s ease-in-out infinite;
         }
 
         .gift-box-icon {
@@ -205,51 +200,40 @@
             overflow: hidden;
         }
 
-        /* GIF 1 Nháy Đủ Màu */
+        /* Chớp màu chuyển động thuần CSS thay cho GIF HTTP bị lỗi */
         .color-flash {
             width: 100%;
             height: 100%;
-            object-fit: cover;
             position: absolute;
             top: 0;
             left: 0;
-            animation: rainbowFlash 0.08s linear infinite;
+            animation: rainbowFlash 0.1s linear infinite;
         }
 
         @keyframes rainbowFlash {
-            0% { filter: hue-rotate(0deg) invert(0); opacity: 1; }
-            25% { filter: hue-rotate(90deg) invert(0.8); opacity: 0.3; }
-            50% { filter: hue-rotate(180deg) invert(0); opacity: 1; }
-            75% { filter: hue-rotate(270deg) invert(0.8); opacity: 0.3; }
-            100% { filter: hue-rotate(360deg) invert(0); opacity: 1; }
+            0% { background: #ff0000; }
+            20% { background: #00ff00; }
+            40% { background: #0000ff; }
+            60% { background: #ffff00; }
+            80% { background: #ff00ff; }
+            100% { background: #00ffff; }
         }
 
-        /* Ảnh Chó Phóng To Thu Nhỏ Vĩnh Viễn */
+        /* Ảnh Troll chuẩn HTTPS Tenor */
         .dog-img {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            max-width: 80%;
-            max-height: 80%;
+            max-width: 85%;
+            max-height: 85%;
             z-index: 1000;
             animation: dogPulse 0.15s ease-in-out infinite alternate;
         }
 
         @keyframes dogPulse {
-            0% { transform: translate(-50%, -50%) scale(0.2); }
-            100% { transform: translate(-50%, -50%) scale(2.2); }
-        }
-
-        /* Hiệu ứng nổ giật mình ban đầu */
-        .jumpscare-shock {
-            animation: shockZoom 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards, dogPulse 0.15s ease-in-out infinite alternate 0.2s;
-        }
-
-        @keyframes shockZoom {
-            0% { transform: translate(-50%, -50%) scale(0.01); }
-            50% { transform: translate(-50%, -50%) scale(4); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            0% { transform: translate(-50%, -50%) scale(0.3); }
+            100% { transform: translate(-50%, -50%) scale(2.0); }
         }
     </style>
 </head>
@@ -273,7 +257,7 @@
         </div>
     </div>
 
-    <!-- Màn 2: Trang Hộp Quà Thủy Tinh Lỏng -->
+    <!-- Màn 2: Trang Hộp Quà -->
     <div id="step2" class="glass-card" style="display: none;">
         <div class="gift-box-icon" onclick="startTroll()">🎁</div>
         <div class="instruction-box">
@@ -285,50 +269,54 @@
 
     <!-- Màn 3: Troll Vĩnh Viễn -->
     <div id="trollScreen">
-        <img class="color-flash" src="http://genk.mediacdn.vn/2017/baby-giphy-3-1496376925165.gif" alt="GIF 1">
-        <img class="dog-img jumpscare-shock" src="https://makeagif.com/i/tVlnwj" alt="Dog">
+        <div class="color-flash"></div>
+        <img class="dog-img" src="https://media.tenor.com/x8v1oNUOmg4AAAAd/rickroll-roll.gif" alt="Rickroll">
         
-        <!-- Nhạc Rickroll chuẩn được tích hợp trực tiếp -->
-        <audio id="audioTrack" src="https://ia801503.us.archive.org/15/items/Rick_Astley_Never_Gonna_Give_You_Up/Rick_Astley_Never_Gonna_Give_You_Up.mp3" preload="auto" loop playsinline></audio>
+        <!-- Audio CDN HTTPS siêu nhanh chống chặn TikTok -->
+        <audio id="audioTrack" src="https://stream.zeno.fm/f3wvbbqmdg8uv" preload="auto" loop playsinline></audio>
     </div>
 
     <script>
-        // Chuyển sang màn Hộp quà
-        function goToGiftStep() {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-            
-            // Tải trước nhạc ngay khi bấm Tiếp tục/Thoát
-            const audio = document.getElementById('audioTrack');
-            audio.load();
+        let audioPrepared = false;
+
+        function prepareAudio() {
+            if(!audioPrepared) {
+                const audio = document.getElementById('audioTrack');
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audioPrepared = true;
+                }).catch(() => {});
+            }
         }
 
-        // Bắt đầu Troll
+        function goToGiftStep() {
+            prepareAudio();
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        }
+
         function startTroll() {
+            prepareAudio();
             const trollScreen = document.getElementById('trollScreen');
             const audio = document.getElementById('audioTrack');
 
             trollScreen.style.display = 'block';
-
-            // Cấu hình âm thanh
             audio.volume = 1.0;
-            audio.currentTime = 0;
             
             const playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.catch(() => {
-                    // Nếu bị trình duyệt chặn Autoplay, chạm vào bất cứ đâu để phát ngay
-                    const playOnInteraction = () => {
+                    const forcePlay = () => {
                         audio.play();
-                        document.removeEventListener('click', playOnInteraction);
-                        document.removeEventListener('touchstart', playOnInteraction);
+                        document.removeEventListener('click', forcePlay);
+                        document.removeEventListener('touchstart', forcePlay);
                     };
-                    document.addEventListener('click', playOnInteraction);
-                    document.addEventListener('touchstart', playOnInteraction);
+                    document.addEventListener('click', forcePlay);
+                    document.addEventListener('touchstart', forcePlay);
                 });
             }
 
-            // Bật toàn màn hình
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
             } else if (document.documentElement.webkitRequestFullscreen) {
@@ -336,7 +324,7 @@
             }
         }
 
-        // Tạo hiệu ứng hạt bong bóng thủy tinh
+        /* Canvas background */
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
